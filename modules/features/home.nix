@@ -48,6 +48,8 @@
         icon_names.media = [ "udiskie-media" ];
       };
 
+      xdg.configFile."gtk-4.0/gtk.css".force = lib.mkForce true;
+
       home.activation.removeKvantumConflict = {
         before = [ "linkGeneration" ];
         after = [ "writeBoundary" ];
@@ -61,19 +63,23 @@
       '';
 
       programs.bash.enable = true;
-      programs.starship.enable = true;
       programs.fzf.enable = true;
-
-      # Add ~/.local/bin to PATH (for patched hermes wrapper)
-      home.sessionVariables.PATH = "$HOME/.local/bin:$PATH";
-
-      # Persist live Noctalia UI changes back to the repo, then rebuild to lock them in
-      home.shellAliases.noctalia-save = "nix run ~/NIX#myNoctalia -- ipc call state all > /tmp/noctalia-save.json && mv /tmp/noctalia-save.json ~/NIX/modules/features/noctalia.json";
-
-	  # Opens spotatui without updating (it can't write in the nix store anyway so I think it fails silently when run without the -U flag)
-	  home.shellAliases.spotatui = "spotatui -U";
+      programs.starship.enable = true;
+      programs.starship.settings = lib.mkForce {
+        palette = "noctalia";
+        palettes.noctalia = {
+          blue = "#b5a895";
+          red = "#cf767c";
+          green = "#9aa887";
+          yellow = "#e5c799";
+          cyan = "#96b3aa";
+          magenta = "#cbaba0";
+          white = "#dcd8cd";
+          black = "#231e1a";
+        };
+      };
 		
-	  home.shellAliases.freedoom = "chocolate-doom -iwad ~/freedoom-0.13.0/freedoom2.wad";
+    home.shellAliases.freedoom = "chocolate-doom -iwad ~/freedoom-0.13.0/freedoom2.wad";
 
 	home.shellAliases.mcp-start = "mcp-proxy --port 3010 -- mcp-server-filesystem /home/redue & mcp-proxy --port 3011 -- mcp-server-git --repository /home/redue/NIX & mcp-proxy --port 3012 -- godot-mcp";
 	  
@@ -92,7 +98,7 @@
 
       xdg.desktopEntries.spotify = {
         name = "Spotify";
-        exec = "spotify --enable-features=UseOzonePlatform --ozone-platform=x11 %U";
+        exec = "spotify --enable-features=UseOzonePlatform --ozone-platform=wayland %U";
         terminal = false;
         type = "Application";
         icon = "spotify-client";
@@ -115,6 +121,7 @@
         };
       };
 
+     
       home.packages = with pkgs; [
 		
 		# Fonts
@@ -125,6 +132,7 @@
         btop
         ffmpeg
         python3
+        jq
 
         # C stuff
         gcc
@@ -141,7 +149,6 @@
 
         # Apps
         libreoffice
-        spotatui
         spotify
         godot
         blender
@@ -158,6 +165,7 @@
 
         # Terminal toys (also very important)
         fastfetch
+        hyfetch
         asciiquarium
         cowsay
         pipes

@@ -7,6 +7,8 @@
 
     wrapper-modules.url = "github:BirdeeHub/nix-wrapper-modules";
 
+    noctalia.url = "github:noctalia-dev/noctalia/cachix";
+
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

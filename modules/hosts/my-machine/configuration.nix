@@ -5,6 +5,7 @@
       self.nixosModules.myMachineHardware
       self.nixosModules.niri
       self.nixosModules.home 
+      self.nixosModules.noctalia
     ];
 
   # Bootloader.
@@ -127,6 +128,9 @@
   nixpkgs.config.permittedInsecurePackages = [
    "openssl-1.1.1w"
   ];
+  nixpkgs.config.problems.handlers = {
+      sublimetext4.broken = "ignore";
+   };
   # List packages installed in system profile. To search, run:
   # $ nix search wget
 
@@ -137,11 +141,13 @@
       "https://cache.nixos.org"
       "https://niri.cachix.org"
       "https://nix-community.cachix.org"
+      "https://noctalia.cachix.org"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCUSeBc="
+      "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
     ];
     # Cache flake evaluation results to speed up subsequent rebuilds
     eval-cache = true;

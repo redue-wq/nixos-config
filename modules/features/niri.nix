@@ -11,7 +11,7 @@
       inherit pkgs;
       settings = {
         spawn-at-startup = [
-          (lib.getExe self'.packages.myNoctalia)
+          "/etc/profiles/per-user/redue/bin/noctalia"
           "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent"
         ];
 
@@ -62,11 +62,11 @@
           { matches = [{ app-id = "kate"; }];         opacity = 0.95; }
           { matches = [{ app-id = "kwrite"; }];       opacity = 0.95; }
           { matches = [{ app-id = "nomacs"; }];       opacity = 1.00; }
-          { matches = [{ app-id = "blender"; }];       opacity = 1.00; }
-          { matches = [{ app-id = "mpv"; }];       opacity = 1.00; }
-          { matches = [{ app-id = "chromium"; }];       opacity = 1.00; }
+          { matches = [{ app-id = "blender"; }];      opacity = 1.00; }
+          { matches = [{ app-id = "mpv"; }];          opacity = 1.00; }
+          { matches = [{ app-id = "chromium"; }];     opacity = 1.00; }
           { matches = [{ app-id = "okular"; }];       opacity = 1.00; }
-          { matches = [{ app-id = "antigravity"; }];       opacity = 1.00; }
+          { matches = [{ app-id = "antigravity"; }];  opacity = 1.00; }
           {
             matches = [{
               app-id = "steam";
@@ -98,11 +98,11 @@
           "Mod+E".spawn-sh      = "thunar";
 
           # ── Noctalia UI ───────────────────────────────────────────────
-          "Mod+S".spawn-sh = "${lib.getExe self'.packages.myNoctalia} ipc call launcher toggle";
+          "Mod+S".spawn-sh = "noctalia msg panel-toggle launcher";
 
           # ── Session ───────────────────────────────────────────────────
-          "Mod+Ctrl+L".spawn-sh = "${lib.getExe self'.packages.myNoctalia} ipc call lockScreen lock";
-          "Mod+Ctrl+S".spawn-sh = "${lib.getExe self'.packages.myNoctalia} ipc call sessionMenu lockAndSuspend";
+          "Mod+Ctrl+L".spawn-sh = "noctalia msg session lock";
+          "Mod+Ctrl+S".spawn-sh = "noctalia msg session lock-and-suspend";
           "Mod+Shift+Q".quit    = {};
 
           # ── Window management ─────────────────────────────────────────
