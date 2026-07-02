@@ -87,8 +87,8 @@
 
           # ── Media & hardware ──────────────────────────────────────────
           "XF86AudioMute".spawn-sh        = "noctalia msg volume-mute";
-          "XF86AudioLowerVolume".spawn-sh = "noctalia msg volume-down";
-          "XF86AudioRaiseVolume".spawn-sh = "noctalia msg volume-up";
+          "XF86AudioLowerVolume".spawn-sh = "noctalia msg volume-down 1";
+          "XF86AudioRaiseVolume".spawn-sh = "noctalia msg volume-up 1";
           "XF86MonBrightnessDown".spawn-sh = "brightnessctl set 1%-";
           "XF86MonBrightnessUp".spawn-sh   = "brightnessctl set 1%+";
 
