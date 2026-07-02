@@ -86,11 +86,11 @@
           "Mod+F1".show-hotkey-overlay = {};
 
           # ── Media & hardware ──────────────────────────────────────────
-          "XF86AudioMute".spawn-sh        = "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle";
-          "XF86AudioLowerVolume".spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%-";
-          "XF86AudioRaiseVolume".spawn-sh = "wpctl set-volume @DEFAULT_AUDIO_SINK@ 1%+";
-          "XF86MonBrightnessDown".spawn-sh = "brightnessctl set 5%-";
-          "XF86MonBrightnessUp".spawn-sh   = "brightnessctl set 5%+";
+          "XF86AudioMute".spawn-sh        = "noctalia msg volume-mute";
+          "XF86AudioLowerVolume".spawn-sh = "noctalia msg volume-down";
+          "XF86AudioRaiseVolume".spawn-sh = "noctalia msg volume-up";
+          "XF86MonBrightnessDown".spawn-sh = "brightnessctl set 1%-";
+          "XF86MonBrightnessUp".spawn-sh   = "brightnessctl set 1%+";
 
           # ── Apps ──────────────────────────────────────────────────────
           "Mod+Return".spawn-sh = "kitty";
