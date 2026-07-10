@@ -52,26 +52,19 @@
         window-rules = [
           {
             background-effect.blur = true;
-            opacity = 0.80;
             draw-border-with-background = false;
             geometry-corner-radius = 16;
             clip-to-geometry = true;
           }
-          { matches = [{ app-id = "firefox"; }];      opacity = 1.00; }
-          { matches = [{ app-id = "sublime_text"; }]; opacity = 0.95; }
-          { matches = [{ app-id = "kate"; }];         opacity = 0.95; }
-          { matches = [{ app-id = "kwrite"; }];       opacity = 0.95; }
-          { matches = [{ app-id = "nomacs"; }];       opacity = 1.00; }
-          { matches = [{ app-id = "blender"; }];      opacity = 1.00; }
-          { matches = [{ app-id = "mpv"; }];          opacity = 1.00; }
-          { matches = [{ app-id = "chromium"; }];     opacity = 1.00; }
-          { matches = [{ app-id = "okular"; }];       opacity = 1.00; }
-          { matches = [{ app-id = "antigravity"; }];  opacity = 1.00; }
+          { matches = [{ app-id = "org.gnome.clocks"; }]; opacity = 0.7; }
           {
             matches = [{
               app-id = "steam";
               title = "^notificationtoasts_\\d+_desktop$";
             }];
+
+            
+            
             default-floating-position = _: {
               props = {
                 x = 10;

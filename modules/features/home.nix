@@ -65,6 +65,11 @@
       programs.bash.enable = true;
       programs.fzf.enable = true;
       programs.starship.enable = true;
+      programs.fish.enable = true;
+      programs.fish.interactiveShellInit = ''
+        starship init fish | source
+        set -U fish_greeting ""
+      '';
       programs.starship.settings = lib.mkForce {
         palette = "noctalia";
         palettes.noctalia = {
@@ -114,9 +119,9 @@
         enable = true;
         settings = {
           confirm_os_window_close = 0;
-          shell = "bash --noprofile";
+          shell = "fish";
           hide_window_decorations = "yes";
-
+          background_opacity = lib.mkForce "0.70";
           cursor_trail = 3;
         };
       };
@@ -161,17 +166,19 @@
         ungoogled-chromium
         gnome-clocks
         boxbuddy
+        distrobox
         drawy
+        tor-browser
 
         # Terminal toys (also very important)
         fastfetch
-        hyfetch
         asciiquarium
         cowsay
         pipes
         cbonsai
         lolcat
         fortune
+        cmatrix
         cava
 
         # MCP
