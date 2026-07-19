@@ -114,6 +114,10 @@
         package = pkgs.papirus-icon-theme;
         name = "Papirus-Dark";
       };
+      
+      gtk.gtk3.extraConfig = {
+         gtk-decoration-layout = ":";
+      };
 
       programs.kitty = {
         enable = true;
@@ -138,6 +142,7 @@
         ffmpeg
         python3
         jq
+        hyprpicker
 
         # C stuff
         gcc
@@ -148,11 +153,13 @@
         micro
         sublime4
         kdePackages.kate
+        fresh-editor
 
         # Very important
         chocolate-doom
 
         # Apps
+        papers
         libreoffice
         spotify
         godot

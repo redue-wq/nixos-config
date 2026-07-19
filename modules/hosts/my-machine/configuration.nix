@@ -168,7 +168,6 @@
     satty            # screenshot annotation tool
     nix-tree         # interactively browse nix store dependencies
     nomacs           # image viewer
-    kdePackages.okular  # document viewer
     yazi             # file manager 
     ncdu             # disk usage analyzer
     baobab           # disk usage visualizer
@@ -198,7 +197,6 @@
     config.common."org.freedesktop.impl.portal.ScreenCast" = "gnome";
     config.common."org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
  };
-
 
  programs.thunar = {
   enable = true;
