@@ -85,8 +85,6 @@
       };
 		
     home.shellAliases.freedoom = "chocolate-doom -iwad ~/freedoom-0.13.0/freedoom2.wad";
-
-	home.shellAliases.mcp-start = "mcp-proxy --port 3010 -- mcp-server-filesystem /home/redue & mcp-proxy --port 3011 -- mcp-server-git --repository /home/redue/NIX & mcp-proxy --port 3012 -- godot-mcp";
 	  
       # Force dark mode preference for apps Stylix can't directly theme
       dconf.settings = {
@@ -143,6 +141,7 @@
         python3
         jq
         hyprpicker
+        wget
 
         # C stuff
         gcc
@@ -169,6 +168,7 @@
         quickemu
         lmstudio
         antigravity
+        llama-cpp-vulkan
         ollama
         ungoogled-chromium
         gnome-clocks
@@ -189,10 +189,7 @@
         cava
 
         # MCP
-        mcp-server-filesystem
-        mcp-server-git
-        mcp-proxy
-        godot-mcp
+        open-websearch
       ];
 
     };

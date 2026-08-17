@@ -190,13 +190,10 @@
   xdg.portal = {
   enable = true;
   extraPortals = [
-      pkgs.xdg-desktop-portal-gtk  # handles file picker with any GTK file manager
-      pkgs.xdg-desktop-portal-gnome
-    ];
-    config.common.default = "gtk";
-    config.common."org.freedesktop.impl.portal.ScreenCast" = "gnome";
-    config.common."org.freedesktop.impl.portal.RemoteDesktop" = "gnome";
- };
+    pkgs.xdg-desktop-portal-gtk
+  ];
+  config.common.default = "gtk";
+};
 
  programs.thunar = {
   enable = true;
@@ -205,7 +202,7 @@
   ];
 };
 
-xdg.portal.config.common."org.freedesktop.impl.portal.FileChooser" = "gtk";
+
 
  programs.nix-ld.enable = true;
  services.gvfs.enable = true;
