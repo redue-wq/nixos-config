@@ -1,6 +1,14 @@
 { self, inputs, ... }: {
   flake.nixosModules.home = { config, pkgs, lib, ... }: {
     imports = [ inputs.home-manager.nixosModules.home-manager ];
+
+        nixpkgs.overlays = [
+      (final: prev: {
+        llama-cpp = prev.llama-cpp.overrideAttrs (_: {
+          src = inputs.llama-cpp;
+        });
+      })
+    ];
     
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
@@ -37,7 +45,6 @@
 
       home.sessionPath = [
         "$HOME/.local/bin"
-        "$HOME/.lmstudio/bin"
       ];
 
       services.udiskie.enable = true;
@@ -46,6 +53,21 @@
       services.udiskie.settings = {
         program_options.appindicator = true;
         icon_names.media = [ "udiskie-media" ];
+      };
+      
+      systemd.user.services.donsetch = {
+          Unit = {
+            Description = "donsetch MCP bridge";
+            After = [ "network.target" ];
+          };
+          Service = {
+            ExecStart = "/home/redue/.npm-global/bin/mcp-proxy --port 3002 -- /home/redue/.npm-global/bin/donsetch mcp";
+            Restart = "always";
+            RestartSec = 3;
+          };
+          Install = {
+            WantedBy = [ "default.target" ];
+          };
       };
 
       xdg.configFile."gtk-4.0/gtk.css".force = lib.mkForce true;
@@ -142,6 +164,9 @@
         jq
         hyprpicker
         wget
+        nodejs
+        playerctl
+        syncthing
 
         # C stuff
         gcc
@@ -166,9 +191,8 @@
         pinta
         qbittorrent
         quickemu
-        lmstudio
-        antigravity
-        llama-cpp-vulkan
+        antigravity-ide
+        llama-cpp
         ollama
         ungoogled-chromium
         gnome-clocks
@@ -176,6 +200,7 @@
         distrobox
         drawy
         tor-browser
+        pi-coding-agent
 
         # Terminal toys (also very important)
         fastfetch
@@ -187,9 +212,7 @@
         fortune
         cmatrix
         cava
-
-        # MCP
-        open-websearch
+        
       ];
 
     };

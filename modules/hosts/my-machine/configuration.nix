@@ -11,6 +11,9 @@
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  
+  # Enable transparent hugepages via kernel command line
+  boot.kernelParams = [ "transparent_hugepage=always" ];
 
   networking = {
     hostName = "myMachine"; # Define your hostname.
@@ -24,6 +27,8 @@
 
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
+
+  
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -99,6 +104,13 @@
       };
     };
   };
+  
+  services.syncthing = {
+  enable = true;
+  user = "redue";
+  dataDir = "/home/redue";
+  configDir = "/home/redue/.config/syncthing";
+ };
 
 
   services.flatpak.enable = true;
@@ -197,7 +209,7 @@
 
  programs.thunar = {
   enable = true;
-  plugins = with pkgs.xfce; [
+  plugins = with pkgs; [
     thunar-archive-plugin  # right-click "Extract Here" / "Compress"
   ];
 };
