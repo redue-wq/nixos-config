@@ -188,6 +188,8 @@
     ffmpeg-headless     # needed by ffmpegthumbnailer
     libgsf              # ODF/document thumbnails
     ripgrep
+    bubblewrap      # pi-sandbox process isolation
+    socat           # pi-sandbox network proxy helper
     fd              # improved find
     libheif
     curl
@@ -226,6 +228,7 @@
  services.power-profiles-daemon.enable = true;
  programs.steam.enable = true;
  virtualisation.podman.enable = true;
+ services.envfs.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.

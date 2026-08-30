@@ -167,6 +167,7 @@
         nodejs
         playerctl
         syncthing
+        qemu
 
         # C stuff
         gcc
