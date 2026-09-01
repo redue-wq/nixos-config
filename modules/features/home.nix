@@ -40,8 +40,8 @@
       '';
 
       home.sessionVariables = {
-        EDITOR = "micro";
-        VISUAL = "micro";
+        EDITOR = "hx";
+        VISUAL = "hx";
         TERMINAL = "kitty";
         NIXOS_OZONE_WL = "1";
       };
@@ -146,6 +146,11 @@
 
       gtk.enable = true;
 
+      gtk.theme = {
+        package = pkgs.adw-gtk3;
+        name = "adw-gtk3-dark";
+      };
+
       gtk.cursorTheme = {
         package = pkgs.bibata-cursors;
         name = "Bibata-Modern-Ice";
@@ -186,10 +191,20 @@
         '';
       };
 
+      programs.helix = {
+        enable = true;
+        settings = {
+          theme = "gruvbox_dark_soft";
+          editor.indent-guides.render = true;
+          editor.indent-guides.character = "│";
+          editor.indent-guides.rainbow-option = "normal";
+         };
+      };
+
      
       home.packages = with pkgs; [
 		
-		# Fonts
+	    	# Fonts
       	maple-mono.NF
 
       	# Utils
@@ -247,6 +262,7 @@
         drawy
         tor-browser
         pi-coding-agent
+        glow
 
         # Terminal toys (also very important)
         fastfetch
