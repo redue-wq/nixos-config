@@ -1,0 +1,5 @@
+# Sandbox / local junk - not part of NixOS config
+# Dotfiles bind-mounted by pi sandbox runtime (ro)
+.*
+!.gitignore
+secrets
