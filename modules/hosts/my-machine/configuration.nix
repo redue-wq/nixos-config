@@ -6,6 +6,7 @@
       self.nixosModules.niri
       self.nixosModules.home 
       self.nixosModules.noctalia
+      inputs.noctalia-greeter.nixosModules.default
     ];
 
   # Bootloader.
@@ -13,7 +14,26 @@
   boot.loader.efi.canTouchEfiVariables = true;
   
   # Enable transparent hugepages via kernel command line
-  boot.kernelParams = [ "transparent_hugepage=always" ];
+  boot.kernelParams = [
+    "transparent_hugepage=always"
+    # Work around PCIe ASPM-related RxErrs from the RTL8822CE.
+    "pcie_aspm=off"
+  ];
+
+  # A large Electron/Chromium core dump previously stalled the machine for
+  # several minutes. Keep crash logging, but do not process/store huge cores.
+  systemd.coredump.settings.Coredump = {
+    Storage = "none";
+    ProcessSizeMax = "0";
+    ExternalSizeMax = "256M";
+    JournalSizeMax = "64M";
+  };
+
+  # The Realtek 8822CE is repeatedly reporting PCIe physical-layer RxErrs
+  # with ASPM enabled. Disable ASPM for this driver (not globally).
+  boot.extraModprobeConfig = ''
+    options rtw88_pci disable_aspm=1
+  '';
 
   networking = {
     hostName = "myMachine"; # Define your hostname.
@@ -91,18 +111,9 @@
     ];
   };
 
-  services.greetd = {
+  programs.noctalia-greeter = {
     enable = true;
-    settings = {
-      initial_session = {
-        command = "niri-session";
-        user = "redue";
-      };
-      default_session = {
-        command = "niri-session";
-        user = "redue";
-      };
-    };
+    settings.keyboard.layout = "it";
   };
   
   services.syncthing = {

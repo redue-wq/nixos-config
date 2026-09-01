@@ -9,6 +9,11 @@
 
     noctalia.url = "github:noctalia-dev/noctalia/cachix";
 
+    noctalia-greeter = {
+      url = "github:noctalia-dev/noctalia-greeter";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     llama-cpp = {
       url = "github:ggml-org/llama.cpp";
       inputs.nixpkgs.follows = "nixpkgs";

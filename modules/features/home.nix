@@ -70,6 +70,19 @@
           };
       };
 
+      systemd.user.services.kdeconnect = {
+        Unit = {
+          Description = "KDE Connect daemon";
+        };
+        Service = {
+          ExecStart = "${pkgs.kdePackages.kdeconnect-kde}/bin/kdeconnectd";
+          Restart = "on-failure";
+        };
+        Install = {
+          WantedBy = [ "default.target" ];
+        };
+      };
+
       xdg.configFile."gtk-4.0/gtk.css".force = lib.mkForce true;
 
       home.activation.removeKvantumConflict = {
@@ -168,6 +181,15 @@
         playerctl
         syncthing
         qemu
+        slurp
+        grim
+        zbar
+        bc
+        imagemagick
+        tesseract
+        wf-recorder
+        translate-shell
+        pulseaudio
 
         # C stuff
         gcc
