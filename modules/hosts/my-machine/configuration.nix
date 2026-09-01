@@ -209,6 +209,8 @@
     file-roller
     mission-center
     warehouse         # manage flatpaks
+    glib
+    gsettings-desktop-schemas
   ];
 
 

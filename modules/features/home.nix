@@ -4,8 +4,11 @@
 
         nixpkgs.overlays = [
       (final: prev: {
-        llama-cpp = prev.llama-cpp.overrideAttrs (_: {
+        # you pin llama.cpp to latest commit (now rev 458681e) — just overriding src
+        # keeps old version/hash and can break. Also set version so build uses new src.
+        llama-cpp = prev.llama-cpp.overrideAttrs (old: {
           src = inputs.llama-cpp;
+          version = inputs.llama-cpp.shortRev or "git-458681e";
         });
       })
     ];
@@ -83,8 +86,6 @@
         };
       };
 
-      xdg.configFile."gtk-4.0/gtk.css".force = lib.mkForce true;
-
       home.activation.removeKvantumConflict = {
         before = [ "linkGeneration" ];
         after = [ "writeBoundary" ];
@@ -143,6 +144,23 @@
         categories = [ "Audio" "Music" "Player" ];
       };
 
+      gtk.enable = true;
+
+      gtk.cursorTheme = {
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Ice";
+        size = 24;
+      };
+
+      home.pointerCursor = {
+        enable = true;
+        package = pkgs.bibata-cursors;
+        name = "Bibata-Modern-Ice";
+        size = 24;
+        gtk.enable = true;
+        x11.enable = true;
+      };
+
       gtk.iconTheme = {
         package = pkgs.papirus-icon-theme;
         name = "Papirus-Dark";
@@ -157,10 +175,15 @@
         settings = {
           confirm_os_window_close = 0;
           shell = "fish";
+          font_family = "Maple Mono NF";
+          font_size = 12.0;
           hide_window_decorations = "yes";
-          background_opacity = lib.mkForce "0.70";
+          background_opacity = lib.mkForce "0.85";
           cursor_trail = 3;
         };
+        extraConfig = ''
+          include themes/noctalia.conf
+        '';
       };
 
      
