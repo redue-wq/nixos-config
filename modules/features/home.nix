@@ -235,11 +235,13 @@
         wf-recorder
         translate-shell
         pulseaudio
+        nixd
 
         # C stuff
         gcc
         valgrind
         gdb
+        clang-tools
 
         # Text editors
         micro
