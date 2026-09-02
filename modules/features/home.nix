@@ -92,6 +92,13 @@
         data = "rm -rf $HOME/.config/Kvantum/Base16Kvantum";
       };
 
+      # IT ALWAYS HAPPENS: keep a cheap cleanup at linkGeneration too (system script handles pre-check)
+      home.activation.cleanupBackupCollisions = {
+        before = [ "linkGeneration" ];
+        after = [ "writeBoundary" ];
+        data = "rm -f \"$HOME/.config/gtk-4.0/gtk.css.backup\" 2>/dev/null || true; find \"$HOME/.config\" -name \"*.backup\" -type f -delete 2>/dev/null || true; find \"$HOME/.local\" -name \"*.backup\" -type f -delete 2>/dev/null || true";
+      };
+
       home.file.".local/share/icons/hicolor/64x64/apps/udiskie-media.png".source = pkgs.runCommand "udiskie-media.png" {
         nativeBuildInputs = [ pkgs.librsvg ];
       } ''

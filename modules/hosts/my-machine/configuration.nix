@@ -111,9 +111,51 @@
     ];
   };
 
+  # IT ALWAYS HAPPENS: clean stale home-manager .backup before activation
+  # checkLinkTargets fails if a .backup already exists from previous rebuild
+  system.activationScripts.cleanupHomeBackups.text = ''
+    rm -f /home/redue/.config/gtk-4.0/gtk.css.backup 2>/dev/null || true
+    find /home/redue/.config -name "*.backup" -type f -delete 2>/dev/null || true
+    find /home/redue/.local -name "*.backup" -type f -delete 2>/dev/null || true
+  '';
+
   programs.noctalia-greeter = {
     enable = true;
-    settings.keyboard.layout = "it";
+    # Full declarative config -> /var/lib/noctalia-greeter/greeter.toml (wins over sync.toml)
+    # See https://docs.noctalia.dev/greeter/configuration/ and examples/greeter.toml
+    settings = {
+      # Session picker Name= (not .desktop id) - list with `noctalia-greeter sessions`
+      session.default = "niri";
+
+      # Cursor must be in greeter.toml (greetd has empty env) - use path for packaged themes
+      cursor = {
+        theme = "Bibata-Modern-Ice";
+        size = 24;
+        path = "${pkgs.bibata-cursors}/share/icons";
+      };
+
+      keyboard = {
+        layout = "it";
+        numlock = true;
+      };
+
+      idle.timeout = 300; # 0 disables, 0-86400. Pointer motion doesn't reset, only wake.
+
+      # Appearance: leave unset to let `Settings -> Security -> Sync Now` from Noctalia
+      # populate sync.toml (wallpaper/palette/font). If you pin scheme/palette here it wins over Sync.
+      # appearance.scheme = "Synced";
+      # appearance.palette = { ... } # complete palette wins over Sync
+
+      # Multi-monitor/output - omit to mirror on all. Pin with:
+      # output.name = "DP-2";
+      # output.layout = "DP-1:0,0; DP-2:1920,0";
+      # output.transforms = "DP-1:normal";
+      # output.scales = "DP-1:1; DP-2:1";
+      # output.scale = 1.0; # global override
+
+      # Auth watchdog (default 60, 0 disables)
+      auth.request_timeout = 60;
+    };
   };
   
   services.syncthing = {
