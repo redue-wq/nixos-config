@@ -74,6 +74,10 @@
             # Third workspace uses dwindle, others stay scrolling (global layout.mode)
             workspace = [
               {
+                name = "2";
+                layout.mode = "master";
+              }
+              {
                 name = "3";
                 layout.mode = "dwindle";
               }
@@ -171,12 +175,12 @@
               windows_move = {
                 enabled = true;
                 duration_ms = 250;
-                curve = "snappy";
+                curve = "easeout"; # was snappy — no bounce on close reflow, as you asked
               };
               workspaces = {
                 enabled = true;
                 duration_ms = 250;
-                curve = "easeout";
+                curve = "snappy"; # was easeout — now snappy for workspace switch
               };
               overview = {
                 enabled = true;

@@ -1,17 +1,6 @@
 { self, inputs, ... }: {
   flake.nixosModules.home = { config, pkgs, lib, ... }: {
     imports = [ inputs.home-manager.nixosModules.home-manager ];
-
-        nixpkgs.overlays = [
-      (final: prev: {
-        # you pin llama.cpp to latest commit (now rev 458681e) — just overriding src
-        # keeps old version/hash and can break. Also set version so build uses new src.
-        llama-cpp = prev.llama-cpp.overrideAttrs (old: {
-          src = inputs.llama-cpp;
-          version = inputs.llama-cpp.shortRev or "git-458681e";
-        });
-      })
-    ];
     
     home-manager.useGlobalPkgs = true;
     home-manager.useUserPackages = true;
@@ -218,7 +207,6 @@
         gh
         btop
         ffmpeg
-        python3
         jq
         hyprpicker
         wget

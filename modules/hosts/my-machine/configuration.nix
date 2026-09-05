@@ -14,12 +14,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   
-  # Enable transparent hugepages via kernel command line
-  boot.kernelParams = [
-    "transparent_hugepage=always"
-    # Work around PCIe ASPM-related RxErrs from the RTL8822CE.
-    "pcie_aspm=off"
-  ];
+  # Work around PCIe ASPM-related RxErrs from the RTL8822CE.
+  boot.kernelParams = [ "pcie_aspm=off" ];
 
   # A large Electron/Chromium core dump previously stalled the machine for
   # several minutes. Keep crash logging, but do not process/store huge cores.
@@ -126,7 +122,7 @@
     # See https://docs.noctalia.dev/greeter/configuration/ and examples/greeter.toml
     settings = {
       # Session picker Name= (not .desktop id) - list with `noctalia-greeter sessions`
-      session.default = "niri";
+      session.default = "umbriel";
 
       # Cursor must be in greeter.toml (greetd has empty env) - use path for packaged themes
       cursor = {
@@ -242,8 +238,8 @@
     ffmpeg-headless     # needed by ffmpegthumbnailer
     libgsf              # ODF/document thumbnails
     ripgrep
-    bubblewrap      # pi-sandbox process isolation
-    socat           # pi-sandbox network proxy helper
+    bubblewrap     
+    socat          
     fd              # improved find
     libheif
     curl
@@ -254,6 +250,7 @@
     warehouse         # manage flatpaks
     glib
     gsettings-desktop-schemas
+    python3
   ];
 
 
