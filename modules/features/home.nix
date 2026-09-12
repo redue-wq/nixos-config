@@ -95,12 +95,18 @@
       '';
 
       programs.bash.enable = true;
+      programs.bash.initExtra = ''
+        [ -f "$HOME/.secrets/opencode" ] && export OPENCODE_API_KEY="$(cat "$HOME/.secrets/opencode")"
+      '';
       programs.fzf.enable = true;
       programs.starship.enable = true;
       programs.fish.enable = true;
       programs.fish.interactiveShellInit = ''
         starship init fish | source
         set -U fish_greeting ""
+        if test -f ~/.secrets/opencode
+          set -gx OPENCODE_API_KEY (cat ~/.secrets/opencode | string trim)
+        end
       '';
       programs.starship.settings = lib.mkForce {
         palette = "noctalia";
@@ -143,6 +149,10 @@
       gtk.enable = true;
 
       gtk.theme = {
+        package = pkgs.adw-gtk3;
+        name = "adw-gtk3-dark";
+      };
+      gtk.gtk4.theme = {
         package = pkgs.adw-gtk3;
         name = "adw-gtk3-dark";
       };
@@ -260,7 +270,7 @@
         tor-browser
         pi-coding-agent
         glow
-
+        
         # Terminal toys (also very important)
         fastfetch
         asciiquarium

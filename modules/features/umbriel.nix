@@ -42,7 +42,6 @@
 
         programs.umbriel = {
           enable = true;
-          # validateConfig = true by default -> `umbriel validate -c` at build
 
           settings = {
             # Include Noctalia's generated palette — https://docs.noctalia.dev/umbriel/configuration/#include
@@ -403,70 +402,8 @@
           };
         };
 
-        # Fix Noctalia 5.0.0's outdated Umbriel template (writes appearance.border_* etc.)
-        # Umbriel 0.1.0 moved them to colors.border.* / colors.* / colors.overview.*
-        # Without this, `umbriel validate` warns and borders fall back to defaults.
-        home.file.".local/bin/fix-umbriel-noctalia" = {
-          executable = true;
-          text = ''
-            #!/usr/bin/env python3
-            import pathlib, re, sys
-            p = pathlib.Path.home() / ".config/umbriel/noctalia.toml"
-            if not p.exists():
-                sys.exit(0)
-            t = p.read_text()
-            if "border_focused" not in t and "background_tint" not in t:
-                sys.exit(0)  # already fixed
-            # Extract and rebuild with new keys
-            def g(k):
-                m = re.search(rf'^{re.escape(k)}\s*=\s*"([^"]+)"', t, re.MULTILINE)
-                return m.group(1) if m else None
-            cols = {}
-            for k in ["background","text_primary","text_muted","accent_primary","accent_secondary","warning","error"]:
-                v = g(k)
-                if v: cols[k] = v
-            border = {}
-            for old, new in [("border_focused","focused"),("border_unfocused","unfocused"),("scratchpad_border_focused","scratchpad_focused"),("scratchpad_border_unfocused","scratchpad_unfocused"),("outer_border_color","outer")]:
-                v = g(old)
-                if v: border[new] = v
-            insert = g("insert_hint_color")
-            backdrop = g("backdrop_color")
-            bg = g("background_tint")
-            out = []
-            out.append("[colors]")
-            for k,v in cols.items(): out.append(f'{k} = "{v}"')
-            if insert: out.append(f'insert_hint = "{insert}"')
-            if backdrop: out.append(f'backdrop = "{backdrop}"')
-            out.append("")
-            out.append("[colors.border]")
-            for k,v in border.items(): out.append(f'{k} = "{v}"')
-            if bg:
-                out.append("")
-                out.append("[colors.overview]")
-                out.append(f'background_tint = "{bg}"')
-            p.write_text("\n".join(out) + "\n")
-          '';
-        };
-
-        home.activation.fixNoctaliaUmbriel = {
-          after = [ "writeBoundary" ];
-          before = [ "linkGeneration" ];
-          data = "$HOME/.local/bin/fix-umbriel-noctalia || true";
-        };
-
-        systemd.user.services.fix-umbriel-noctalia = {
-          Unit.Description = "Fix Noctalia Umbriel template for Umbriel 0.1.0";
-          Service = {
-            Type = "oneshot";
-            ExecStart = "%h/.local/bin/fix-umbriel-noctalia";
-          };
-        };
-        systemd.user.paths.fix-umbriel-noctalia = {
-          Unit.Description = "Watch Noctalia Umbriel palette for outdated keys";
-          Path.PathChanged = "%h/.config/umbriel/noctalia.toml";
-          Install.WantedBy = [ "default.target" ];
-          Unit.After = [ "graphical-session.target" ];
-        };
+        # Noctalia 5.0.1+ now writes correct Umbriel template (colors.border etc.)
+        # Previous fix for 5.0.0 removed - it was stripping the new correct keys.
       };
     };
 }

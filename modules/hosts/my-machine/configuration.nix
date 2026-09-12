@@ -45,7 +45,9 @@
   hardware.bluetooth.enable = true;
   hardware.bluetooth.powerOnBoot = true;
 
-  
+  environment.sessionVariables = {
+    LD_LIBRARY_PATH = "/run/current-system/sw/share/nix-ld/lib";
+  };
 
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
@@ -102,7 +104,7 @@
   users.users.redue = {
     isNormalUser = true;
     description = "Redue";
-    extraGroups = [ "networkmanager" "wheel" "video"];
+    extraGroups = [ "networkmanager" "wheel" "video" "input" ];
     packages = with pkgs; [
     #  thunderbird
     ];
@@ -204,12 +206,14 @@
       "https://niri.cachix.org"
       "https://nix-community.cachix.org"
       "https://noctalia.cachix.org"
+      "https://cache.numtide.com"
     ];
     trusted-public-keys = [
       "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
       "niri.cachix.org-1:Wv0OmO7PsuocRKzfDoJ3mulSl7Z6oezYhGhR+3W2964="
       "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCUSeBc="
       "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+      "niks3.numtide.com-1:DTx8wZduET09hRmMtKdQDxNNthLQETkc/yaX7M4qK0g="
     ];
     # Cache flake evaluation results to speed up subsequent rebuilds
     eval-cache = true;
@@ -272,6 +276,11 @@
 
 
  programs.nix-ld.enable = true;
+ programs.nix-ld.libraries = with pkgs; [
+  stdenv.cc.cc    # libstdc++
+  zlib
+  openssl
+];
  services.gvfs.enable = true;
  services.tumbler.enable = true;
  services.udisks2.enable = true;
