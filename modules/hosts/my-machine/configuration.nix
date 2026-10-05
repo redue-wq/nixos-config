@@ -7,7 +7,6 @@
       self.nixosModules.umbriel
       self.nixosModules.home 
       self.nixosModules.noctalia
-      inputs.noctalia-greeter.nixosModules.default
     ];
 
   # Bootloader.
@@ -118,7 +117,7 @@
     find /home/redue/.local -name "*.backup" -type f -delete 2>/dev/null || true
   '';
 
-  programs.noctalia-greeter = {
+  services.displayManager.noctalia-greeter = {
     enable = true;
     # Full declarative config -> /var/lib/noctalia-greeter/greeter.toml (wins over sync.toml)
     # See https://docs.noctalia.dev/greeter/configuration/ and examples/greeter.toml
@@ -195,6 +194,21 @@
   nixpkgs.config.problems.handlers = {
       sublimetext4.broken = "ignore";
    };
+  # Steam popups flicker-close on Umbriel/Niri with xwayland-satellite 0.8.2.
+  # Upstream: Supreeeme/xwayland-satellite#468 (dup #503) – commit 3273a0f focuses
+  # override-redirect popups on first configure, Steam holds X grab and reclaims
+  # focus ~35ms later, menu closes instantly. Restore 0.8.1 behaviour until fixed upstream.
+  # Drop this overlay once satellite >0.8.2 with a fix is released.
+  nixpkgs.overlays = [
+    (final: prev: {
+      xwayland-satellite = prev.xwayland-satellite.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          substituteInPlace src/server/event.rs \
+            --replace-fail 'if first_configure {' 'if false && first_configure { // steam-popup-fix #468: restore 0.8.1 behaviour'
+        '';
+      });
+    })
+  ];
   # List packages installed in system profile. To search, run:
   # $ nix search wget
 
@@ -255,6 +269,7 @@
     glib
     gsettings-desktop-schemas
     python3
+    nix-search-tv
   ];
 
 

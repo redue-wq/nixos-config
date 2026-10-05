@@ -7,7 +7,16 @@
   };
 
   perSystem = { pkgs, lib, self', ... }: {
-    packages.myNiri = inputs.wrapper-modules.wrappers.niri.wrap {
+    packages.myNiri = let
+      # Same Steam popup fix as NixOS overlay (xwayland-satellite#468).
+      # perSystem pkgs has no nixpkgs.overlays, so patch locally.
+      patchedSatellite = pkgs.xwayland-satellite.overrideAttrs (old: {
+        postPatch = (old.postPatch or "") + ''
+          substituteInPlace src/server/event.rs \
+            --replace-fail 'if first_configure {' 'if false && first_configure { // steam-popup-fix #468: restore 0.8.1 behaviour'
+        '';
+      });
+    in inputs.wrapper-modules.wrappers.niri.wrap {
       inherit pkgs;
       settings = {
         spawn-at-startup = [
@@ -15,7 +24,7 @@
           "${pkgs.lxqt.lxqt-policykit}/bin/lxqt-policykit-agent"
         ];
 
-        xwayland-satellite.path = lib.getExe pkgs.xwayland-satellite;
+        xwayland-satellite.path = lib.getExe patchedSatellite;
 
         screenshot-path = "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png";
 

@@ -73,11 +73,11 @@
             # Third workspace uses dwindle, others stay scrolling (global layout.mode)
             workspace = [
               {
-                name = "2";
+                index = 2;
                 layout.mode = "master";
               }
               {
-                name = "3";
+                index = 3;
                 layout.mode = "dwindle";
               }
             ];
@@ -87,7 +87,7 @@
             layout = {
               mode = "scrolling"; # scrolling | dwindle | master — per-workspace override via [[workspace]]
               gap = 5; # niri gaps 5
-              width_presets = [
+              extent_presets = [
                 0.333
                 0.5
                 0.667
@@ -99,10 +99,9 @@
                 bottom = 0;
               };
               scrolling = {
-                default_width_fraction = 0.5;
+                default_extent_fraction = 0.5;
                 center_underfull_strip = true;
-                center_focused = false;
-                expand_single_column = true;
+                center_focused = "never";
               };
               master = {
                 position = "left";
@@ -315,12 +314,15 @@
               "Mod+Shift+8" = "window-move-to-workspace:8";
               "Mod+Shift+9" = "window-move-to-workspace:9";
 
-              # ── Resize (niri Mod+Minus/Plus) ───────────────────────
-              "Mod+Minus" = "window-modify-width:-0.1";
-              "Mod+Plus" = "window-modify-width:+0.1";
-              "Mod+Ctrl+Minus" = "window-modify-height:-0.1";
-              "Mod+Ctrl+Plus" = "window-modify-height:+0.1";
-              "Mod+R" = "window-cycle-width";
+              # ── Resize (matches example config for scrolling layout) ────────────────
+              # Primary extent = column width (strip axis)
+              # Secondary extent = window height within column
+              "Mod+Minus" = "window-modify-primary-extent:-0.1";
+              "Mod+Plus" = "window-modify-primary-extent:0.1";
+              "Mod+Ctrl+Minus" = "window-modify-secondary-extent:-0.1";
+              "Mod+Ctrl+Plus" = "window-modify-secondary-extent:0.1";
+              "Mod+R" = "window-cycle-primary-extent";
+              "Mod+Shift+R" = "window-cycle-primary-extent-back";
 
               # ── Scrolling strip — Umbriel auto-reveals on focus, no extra keys needed
               # Touchpad 3-finger swipe + Mod+drag still work natively
@@ -338,12 +340,12 @@
               "Mod+Tab" = "scratchpad-focus-next"; # cycle visible scratchpad windows
               "Mod+F1" = "cheatsheet-toggle"; # niri show-hotkey-overlay
 
-              # ── Screenshots — Umbriel has no built-in screenshot actions (unlike niri)
-              # Use grim+slurp over wlr-screencopy + satty (already in your systemPackages)
-              # Mirrors niri: Print region, Ctrl+Print screen, Alt+Print output
-              "Print" = "spawn:sh -c 'grim -g \"$(slurp)\" - | satty --filename - --copy-command wl-copy'";
-              "Ctrl+Print" = "spawn:sh -c 'grim - | satty --filename - --copy-command wl-copy'";
-              "Alt+Print" = "spawn:sh -c 'grim -g \"$(slurp -o)\" - | satty --filename - --copy-command wl-copy'";
+              # ── Screenshots — via Noctalia (wlr-screencopy) + satty pipe
+              # Output policy lives in [shell.screenshot] (directory, pipe_command, etc.)
+              # Mirrors niri: Print region, Ctrl+Print screen, Alt+Print picker
+              "Print" = "spawn:noctalia msg screenshot-region";
+              "Ctrl+Print" = "spawn:noctalia msg screenshot-fullscreen";
+              "Alt+Print" = "spawn:noctalia msg screenshot-fullscreen pick";
             };
 
             # Window rules — https://docs.noctalia.dev/umbriel/window-rules/
@@ -356,18 +358,12 @@
               {
                 match.app_id = "^dev\\.noctalia\\.Noctalia$";
                 default_floating = true;
-                default_size = [
-                  1020
-                  900
-                ];
+                default_floating_size_px = { width = 1020; height = 900; };
               }
               {
                 match.app_id = "^dev\\.noctalia\\.UmbrielSharePicker$";
                 default_floating = true;
-                default_size = [
-                  800
-                  600
-                ];
+                default_floating_size_px = { width = 800; height = 600; };
               }
               {
                 match.app_id = "^org\\.gnome\\.clocks$";

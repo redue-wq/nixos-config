@@ -234,6 +234,8 @@
         translate-shell
         pulseaudio
         nixd
+        man-pages
+        man-pages-posix
 
         # C stuff
         gcc
@@ -270,6 +272,7 @@
         tor-browser
         pi-coding-agent
         glow
+        opencode
         
         # Terminal toys (also very important)
         fastfetch
